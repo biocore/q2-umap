@@ -5,6 +5,7 @@ from skbio.stats.composition import clr
 from scipy.spatial.distance import euclidean
 from sklearn.metrics.pairwise import _VALID_METRICS as _SK_VALID_METRICS
 from scipy.spatial.distance import pdist
+from ast import literal_eval
 
 _ADDITIONAL_METRICS = ['aitchison']
 _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
@@ -12,11 +13,13 @@ _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
 
 def distances(table: pd.DataFrame, metric: str = 'euclidean',
               n_components: int = 3, pseudocount: int = 1,
-              umap_args: dict = None) -> skbio.DistanceMatrix:
+              umap_args: str = None) -> skbio.DistanceMatrix:
 
     # perform argument checks
     if umap_args is None:
         umap_args = dict()
+    else:
+        umap_args = literal_eval(umap_args)
     if (metric not in _VALID_METRICS and not callable(metric) and metric is
             not None):
         raise ValueError("Unknown metric %s. "
