@@ -32,7 +32,7 @@ class TestUMAPPipeline(TestPluginBase):
         self.assertEqual(repr(results.distance_matrix.type),
                          'DistanceMatrix')
         self.assertEqual(repr(results.pcoa_results.type),
-                         'PCOAResults')
+                         'PCoAResults')
         self.assertEqual(repr(results.emperor.type), 'Visualization')
 
 
