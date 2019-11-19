@@ -12,6 +12,27 @@ _ADDITIONAL_METRICS = ['aitchison']
 _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
 
 
+def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
+             pseudocount=1, umap_args=None):
+    dm = ctx.get_action('umap', 'distances')
+    pcoa = ctx.get_action('diversity', 'pcoa')
+    emperor_plot = ctx.get_action('emperor', 'plot')
+
+    results = []
+
+    dm_results = dm(table=table, umap_metric=umap_metric,
+                    n_components=n_components, pseudocount=pseudocount,
+                    umap_args=umap_args)
+
+    results += dm_results
+
+    pcoa_results = pcoa(distance_matrix=dm_results)
+
+    results += emperor_plot(pcoa=pcoa_results, metadata=metadata)
+
+    return tuple(results)
+
+
 def distances(table: pd.DataFrame, umap_metric: str = 'euclidean',
               n_components: int = 3, pseudocount: int = 1,
               umap_args: Union[str, dict] = None) -> skbio.DistanceMatrix:
