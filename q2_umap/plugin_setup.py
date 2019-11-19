@@ -18,7 +18,7 @@ plugin = Plugin(
 plugin.methods.register_function(
     function=distances,
     inputs={'table': FeatureTable[Frequency]},
-    parameters={'metric': Str,
+    parameters={'umap_metric': Str,
                 'n_components': Int,
                 'pseudocount': Int,
                 'umap_args': Str},
@@ -28,7 +28,7 @@ plugin.methods.register_function(
                   'distances should be computed.')
     },
     parameter_descriptions={
-        'metric': 'The metric to use within the UMAP algorithm.',
+        'umap_metric': 'The metric to use within the UMAP algorithm.',
         'n_components': 'The number of components to use for UMAP embeddings',
         'pseudocount': 'The pseudocount to use if using \'aitchision\' as '
                        'metric',
