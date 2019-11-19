@@ -12,9 +12,11 @@ install:
   - conda env create -q -n test-env --file qiime2-latest-py36-linux-conda.yml
   - conda install --yes -n test-env --file ci/conda_requirements.txt -c conda-forge
   - source activate test-env
-  - pip install -e .
   - conda install --yes flake8 nose coveralls
+  - pip install -e .
+  - qiime dev refresh-cache
 script:
   - source activate test-env
   - flake8 q2_umap setup.py
   - nosetests -v q2_umap --with-coverage --cover-package=q2_umap
+  - qiime umap --help
