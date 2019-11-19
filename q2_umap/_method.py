@@ -26,9 +26,11 @@ def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
 
     results += dm_results
 
-    pcoa_results = pcoa(distance_matrix=dm_results)
+    pcoa_results = pcoa(distance_matrix=dm_results.distance_matrix)
 
-    results += emperor_plot(pcoa=pcoa_results, metadata=metadata)
+    results += pcoa_results
+
+    results += emperor_plot(pcoa=pcoa_results.pcoa, metadata=metadata)
 
     return tuple(results)
 
