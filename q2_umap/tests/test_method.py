@@ -22,7 +22,7 @@ class TestUMAPMethod(unittest.TestCase):
 
     def test_umap_aitchison(self):
         umap_kwargs = {'n_neighbors': 3}
-        dm = distances(self.data, metric='aitchison',
+        dm = distances(self.data, umap_metric='aitchison',
                        umap_args=umap_kwargs)
         self.assertEqual(dm.shape, (6, 6))
 
