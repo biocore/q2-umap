@@ -10,4 +10,7 @@ setup(
     entry_points={
         'qiime2.plugins': ['q2-umap=q2_umap.plugin_setup:plugin']
     },
+    package_data={
+        "q2_umap": ['citations.bib'],
+    },
 )
