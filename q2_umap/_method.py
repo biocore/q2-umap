@@ -18,8 +18,9 @@ def distances(table: pd.DataFrame, metric: str = 'euclidean',
     # perform argument checks
     if umap_args is None:
         umap_args = dict()
-    else:
+    elif isinstance(umap_args, str):
         umap_args = literal_eval(umap_args)
+
     if (metric not in _VALID_METRICS and not callable(metric) and metric is
             not None):
         raise ValueError("Unknown metric %s. "
