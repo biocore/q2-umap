@@ -2,7 +2,6 @@ from qiime2.plugin import (Plugin, Str, Int, Citations)
 from q2_types.feature_table import FeatureTable, Frequency
 from q2_types.distance_matrix import DistanceMatrix
 from q2_umap._method import distances
-import skbio
 
 citations = Citations.load('citations.bib', package='q2_umap')
 
@@ -42,4 +41,3 @@ plugin.methods.register_function(
                 'pairs of samples in a feauture table.',
     citations=[citations['lel2018umap']]
 )
-
