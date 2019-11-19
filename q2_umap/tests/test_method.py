@@ -37,12 +37,9 @@ class TestUMAPPipeline(TestPluginBase):
         self.assertEqual(repr(results.emperor.type), 'Visualization')
 
 
-class TestUMAPMethod(TestPluginBase):
-
-    package = 'q2_umap'
+class TestUMAPMethod(unittest.TestCase):
 
     def setUp(self):
-        super().setUp()
         self.data = pd.DataFrame([[1, 2, 0, 4],
                                   [1, 4, 3, 5],
                                   [0, 0, 1, 2],
