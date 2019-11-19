@@ -1,2 +1,2 @@
 # q2-umap
-Applying umap to microbiom data via QIIME2
+Applying umap to microbiome data via QIIME2
