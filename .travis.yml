@@ -13,7 +13,7 @@ install:
   - conda install --yes -n test-env --file ci/conda_requirements.txt -c conda-forge
   - source activate test-env
   - pip install -e .
-  - conda install --yes flake8 nose
+  - conda install --yes flake8 nose coveralls
 script:
   - source activate test-env
   - flake8 q2_umap setup.py
