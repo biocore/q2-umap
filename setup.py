@@ -15,4 +15,6 @@ setup(
         "q2_umap": ['citations.bib'],
     },
     zip_safe=False,
+    install_requires=['scikit-learn', 'scipy', 'scikit-bio',
+                      'umap-learn', 'pandas']
 )
