@@ -1,11 +1,15 @@
 import unittest
 import pandas as pd
+from qiime2.plugin.testing import TestPluginBase
 from q2_umap._method import distances
 
 
-class TestUMAPMethod(unittest.TestCase):
+class TestUMAPMethod(TestPluginBase):
+
+    package = 'q2_umap'
 
     def setUp(self):
+        super().setUp()
         self.data = pd.DataFrame([[1, 2, 0, 4],
                                   [1, 4, 3, 5],
                                   [0, 0, 1, 2],
