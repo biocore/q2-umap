@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="q2-umap",
     packages=find_packages(),
+    version='0.0.1',
     author="George Armstrong",
     author_email="garmstro@eng.ucsd.edu",
     description="Sample Embedding with UMAP",
@@ -13,4 +14,5 @@ setup(
     package_data={
         "q2_umap": ['citations.bib'],
     },
+    zip_safe=False,
 )
