@@ -22,8 +22,7 @@ def distances(table: pd.DataFrame, umap_metric: str = 'euclidean',
     elif isinstance(umap_args, str):
         umap_args = literal_eval(umap_args)
 
-    if (umap_metric not in _VALID_METRICS and not callable(umap_metric) and
-            umap_metric is not None):
+    if umap_metric not in _VALID_METRICS and not callable(umap_metric):
         raise ValueError("Unknown metric %s. "
                          "Valid metrics are %s, or 'precomputed', or a "
                          "callable" % (umap_metric, _VALID_METRICS))
