@@ -39,6 +39,6 @@ def distances(table: pd.DataFrame, metric: str = 'euclidean',
     embedding = reducer.fit_transform(counts)
 
     # get euclidean distances between UMAP embeddings
-    distances = pdist(embedding)
+    sample_distances = pdist(embedding)
 
-    return skbio.DistanceMatrix(distances, ids=table.index)
+    return skbio.DistanceMatrix(sample_distances, ids=table.index)
