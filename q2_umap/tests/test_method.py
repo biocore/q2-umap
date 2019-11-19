@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from q2_umap._method import umap_runner
+from q2_umap._method import distances
 
 
 class TestUMAPMethod(unittest.TestCase):
@@ -17,13 +17,13 @@ class TestUMAPMethod(unittest.TestCase):
 
     def test_umap_runner(self):
         umap_kwargs = {'n_neighbors': 3}
-        dm = umap_runner(self.data, umap_args=umap_kwargs)
+        dm = distances(self.data, umap_args=umap_kwargs)
         self.assertEqual(dm.shape, (6, 6))
 
     def test_umap_aitchison(self):
         umap_kwargs = {'n_neighbors': 3}
-        dm = umap_runner(self.data, metric='aitchison',
-                         umap_args=umap_kwargs)
+        dm = distances(self.data, metric='aitchison',
+                       umap_args=umap_kwargs)
         self.assertEqual(dm.shape, (6, 6))
 
 

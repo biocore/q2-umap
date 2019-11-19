@@ -10,9 +10,9 @@ _ADDITIONAL_METRICS = ['aitchison']
 _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
 
 
-def umap_runner(table: pd.DataFrame, metric: str = 'euclidean',
-                n_components: int = 3, pseudocount: int = 1,
-                umap_args: dict = None) -> skbio.DistanceMatrix:
+def distances(table: pd.DataFrame, metric: str = 'euclidean',
+              n_components: int = 3, pseudocount: int = 1,
+              umap_args: dict = None) -> skbio.DistanceMatrix:
 
     # perform argument checks
     if umap_args is None:
