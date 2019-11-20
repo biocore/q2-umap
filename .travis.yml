@@ -22,3 +22,5 @@ script:
   - flake8 q2_umap setup.py
   - nosetests -v q2_umap --with-coverage --cover-package=q2_umap
   - qiime umap --help
+after_success:
+  - coveralls
