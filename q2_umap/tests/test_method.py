@@ -46,7 +46,3 @@ class TestUMAPMethod(unittest.TestCase):
     def test_umap_unknown_metric_error(self):
         with self.assertRaisesRegex(ValueError, r'Unknown metric'):
             distances(self.data, umap_metric='unknown_metric')
-
-
-if __name__ == '__main__':
-    unittest.main()
