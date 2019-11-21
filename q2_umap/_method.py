@@ -47,7 +47,7 @@ def distances(table: pd.DataFrame, umap_metric: str = 'euclidean',
 
     if umap_metric not in _VALID_METRICS and not callable(umap_metric):
         raise ValueError("Unknown metric %s. "
-                         "Valid metrics are %s, or 'precomputed', or a "
+                         "Valid metrics are %s, or a "
                          "callable" % (umap_metric, _VALID_METRICS))
     counts = table.values
     if counts.sum() == 0:
