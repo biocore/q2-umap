@@ -23,6 +23,7 @@ class TestUMAPPipeline(TestPluginBase):
                          index=pd.Index(['S1', 'S2', 'S3', 'S4', 'S5', 'S6'],
                                         name='id')))
         self.pipeline = self.plugin.pipelines['pipeline']
+        self.distance = self.plugin.methods['distances']
 
     def test_pipeline(self):
         table = Artifact.import_data('FeatureTable[Frequency]', self.data)
@@ -34,6 +35,11 @@ class TestUMAPPipeline(TestPluginBase):
         self.assertEqual(repr(results.pcoa_results.type),
                          'PCoAResults')
         self.assertEqual(repr(results.emperor.type), 'Visualization')
+
+    def test_distances(self):
+        table = Artifact.import_data('FeatureTable[Frequency]', self.data)
+        results = self.distance(table, umap_args="{'n_neighbors': 3}")
+        self.assertEqual(repr(results.distance_matrix.type), 'DistanceMatrix')
 
 
 if __name__ == '__main__':
