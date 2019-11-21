@@ -6,7 +6,7 @@ from scipy.spatial.distance import euclidean
 from sklearn.metrics.pairwise import _VALID_METRICS as _SK_VALID_METRICS
 from scipy.spatial.distance import pdist
 from ast import literal_eval
-from typing import Union
+from typing import Union, Callable
 
 _ADDITIONAL_METRICS = ['aitchison']
 _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
@@ -35,7 +35,8 @@ def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
     return tuple(results)
 
 
-def distances(table: pd.DataFrame, umap_metric: str = 'euclidean',
+def distances(table: pd.DataFrame,
+              umap_metric: Union[str, Callable] = 'euclidean',
               n_components: int = 3, pseudocount: int = 1,
               umap_args: Union[str, dict] = None) -> skbio.DistanceMatrix:
 
@@ -47,7 +48,7 @@ def distances(table: pd.DataFrame, umap_metric: str = 'euclidean',
 
     if umap_metric not in _VALID_METRICS and not callable(umap_metric):
         raise ValueError("Unknown metric %s. "
-                         "Valid metrics are %s, or 'precomputed', or a "
+                         "Valid metrics are %s, or a "
                          "callable" % (umap_metric, _VALID_METRICS))
     counts = table.values
     if counts.sum() == 0:
