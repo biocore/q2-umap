@@ -13,12 +13,22 @@ _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
 
 
 def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
-             pseudocount=1, umap_args=None):
+             pseudocount=1, umap_args=None, sampling_depth=None,
+             with_replacement=False):
+    rarefy = ctx.get_action('feature_table', 'rarefy')
     dm = ctx.get_action('umap', 'distances')
     pcoa = ctx.get_action('diversity', 'pcoa')
     emperor_plot = ctx.get_action('emperor', 'plot')
 
     results = []
+
+    if sampling_depth:
+        rarefied_table = rarefy(table=table, sampling_depth=sampling_depth,
+                                with_replacement=with_replacement)
+    else:
+        rarefied_table = [table]
+
+    results += rarefied_table
 
     dm_results = dm(table=table, umap_metric=umap_metric,
                     n_components=n_components, pseudocount=pseudocount,

@@ -1,5 +1,5 @@
 from qiime2.plugin import (Plugin, Str, Int, Citations, Metadata,
-                           Visualization)
+                           Visualization, Range, Bool)
 from q2_types.feature_table import FeatureTable, Frequency
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.ordination import PCoAResults
@@ -27,9 +27,12 @@ plugin.pipelines.register_function(
         'umap_metric': Str,
         'n_components': Int,
         'pseudocount': Int,
-        'umap_args': Str
+        'umap_args': Str,
+        'sampling_depth': Int % Range(1, None),
+        'with_replacement': Bool,
     },
     outputs=[
+        ('rarefied_table', FeatureTable[Frequency]),
         ('distance_matrix', DistanceMatrix),
         ('pcoa_results', PCoAResults),
         ('emperor', Visualization),
@@ -44,16 +47,24 @@ plugin.pipelines.register_function(
         'n_components': 'The number of components to use for UMAP embeddings',
         'pseudocount': 'The pseudocount to use if using \'aitchision\' as '
                        'metric',
-        'umap_args': 'Additional arguments to passed into UMAP'
+        'umap_args': 'Additional arguments to passed into UMAP',
+        'sampling_depth': 'The total frequency that each sample should be '
+                          'rarefied to prior to computing distance metric.',
+        'with_replacement': 'Rarefy with replacement by sampling from the '
+                            'multinomial distribution instead of rarefying '
+                            'without replacement.',
     },
     output_descriptions={
+        'rarefied_table':
+            'The resulting rarefied feature table (if sampling depth is '
+            'specified). Otherwise, it is the original table.',
         'distance_matrix':
             'Matrix of distances between UMAP embeddings.',
         'pcoa_results':
             'PCoA matrix computed from distances between UMAP embeddings '
             'for each sample.',
         'emperor':
-            'Emperor plot of the PCoA matrix computed from UMAP embeddings.'
+            'Emperor plot of the PCoA matrix computed from UMAP embeddings.',
     },
     name='UMAP Pipeline',
     description='Applies a steps to ordinate and visualize samples in a '

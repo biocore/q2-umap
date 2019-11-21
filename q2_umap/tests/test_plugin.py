@@ -1,6 +1,7 @@
 import pandas as pd
 from qiime2 import Metadata, Artifact
 from qiime2.plugin.testing import TestPluginBase
+import pandas.testing as pdt
 
 
 class TestUMAPPipeline(TestPluginBase):
@@ -28,7 +29,29 @@ class TestUMAPPipeline(TestPluginBase):
         table = Artifact.import_data('FeatureTable[Frequency]', self.data)
         results = self.pipeline(table, metadata=self.metadata,
                                 umap_args="{'n_neighbors': 3}")
-        self.assertEqual(len(results), 3)
+        self.assertEqual(len(results), 4)
+
+    def test_pipeline_rarefied_table_no_rarefy(self):
+        table = Artifact.import_data('FeatureTable[Frequency]', self.data)
+        results = self.pipeline(table, metadata=self.metadata,
+                                umap_args="{'n_neighbors': 3}")
+        self.assertEqual(repr(results.rarefied_table.type),
+                         'FeatureTable[Frequency]')
+        raw_table = table.view(pd.DataFrame)
+        no_rarefy_table = results.rarefied_table.view(pd.DataFrame)
+        pdt.assert_frame_equal(raw_table, no_rarefy_table)
+
+    def test_pipeline_rarefied_table_with_rarefy(self):
+        table = Artifact.import_data('FeatureTable[Frequency]', self.data)
+        sampling_depth = 2
+        results = self.pipeline(table, metadata=self.metadata,
+                                umap_args="{'n_neighbors': 3}",
+                                sampling_depth=sampling_depth)
+        self.assertEqual(repr(results.rarefied_table.type),
+                         'FeatureTable[Frequency]')
+        rarefied_table = results.rarefied_table.view(pd.DataFrame)
+        sample_sums = rarefied_table.sum(axis='columns')
+        self.assertTrue((sample_sums == sampling_depth).all())
 
     def test_pipeline_dm(self):
         table = Artifact.import_data('FeatureTable[Frequency]', self.data)
