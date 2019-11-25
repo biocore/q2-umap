@@ -25,12 +25,14 @@ def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
     if sampling_depth:
         rarefied_table = rarefy(table=table, sampling_depth=sampling_depth,
                                 with_replacement=with_replacement)
+        to_dm = rarefied_table.rarefied_table
     else:
         rarefied_table = [table]
+        to_dm = table
 
     results += rarefied_table
 
-    dm_results = dm(table=table, umap_metric=umap_metric,
+    dm_results = dm(table=to_dm, umap_metric=umap_metric,
                     n_components=n_components, pseudocount=pseudocount,
                     umap_args=umap_args)
 
