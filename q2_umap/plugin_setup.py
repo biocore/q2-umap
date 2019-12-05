@@ -1,9 +1,11 @@
 from qiime2.plugin import (Plugin, Str, Int, Citations, Metadata,
-                           Visualization, Range, Bool)
+                           Visualization, Range, Bool, Choices, Float)
 from q2_types.feature_table import FeatureTable, Frequency
+from q2_types.tree import Phylogeny, Rooted
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.ordination import PCoAResults
 import q2_umap
+from q2_diversity import _beta as beta
 
 citations = Citations.load('citations.bib', package='q2_umap')
 
@@ -105,5 +107,70 @@ plugin.methods.register_function(
                 'pairs of samples in a feauture table.',
     citations=[
         citations['lel2018umap'],
+    ]
+)
+
+plugin.methods.register_function(
+    function=q2_umap.distances_phylogenetic,
+    inputs={
+        'table': FeatureTable[Frequency],
+        'phylogeny': Phylogeny[Rooted],
+    },
+    parameters={
+        'umap_metric': Str % Choices(beta.phylogenetic_metrics()),
+        'n_jobs': Int,
+        'variance_adjusted': Bool,
+        'alpha': Float % Range(0, 1, inclusive_end=True),
+        'bypass_tips': Bool,
+        'n_components': Int,
+        'umap_args': Str,
+    },
+    outputs=[
+        ('distance_matrix', DistanceMatrix),
+    ],
+    input_descriptions={
+        'table': ('The feature table containing the samples over which UMAP '
+                  'distances should be computed.'),
+        'phylogeny': ('Phylogenetic tree containing tip identifiers that '
+                      'correspond to the feature identifiers in the table. '
+                      'This tree can contain tip ids that are not present in '
+                      'the table, but all feature ids in the table must be '
+                      'present in this tree.')
+    },
+    parameter_descriptions={
+        'umap_metric': 'The metric to use within the UMAP algorithm.',
+        'n_jobs': 'The number of workers to use.',
+        'variance_adjusted': ('Perform variance adjustment based on Chang et '
+                              'al. BMC Bioinformatics 2011. Weights distances '
+                              'based on the proportion of the relative '
+                              'abundance represented between the samples at a'
+                              ' given node under evaluation.'),
+        'alpha': ('This parameter is only used when the choice of metric is '
+                  'generalized_unifrac. The value of alpha controls importance'
+                  ' of sample proportions. 1.0 is weighted normalized UniFrac.'
+                  ' 0.0 is close to unweighted UniFrac, but only if the sample'
+                  ' proportions are dichotomized.'),
+        'bypass_tips': ('In a bifurcating tree, the tips make up about 50% of '
+                        'the nodes in a tree. By ignoring them, specificity '
+                        'can be traded for reduced compute time. This has the'
+                        ' effect of collapsing the phylogeny, and is analogous'
+                        ' (in concept) to moving from 99% to 97% OTUs'),
+        'n_components': 'The number of components to use for UMAP embeddings',
+        'umap_args': 'Additional arguments to passed into UMAP',
+    },
+    output_descriptions={
+        'distance_matrix': 'The resulting distance matrix.',
+    },
+    name='UMAP Distances',
+    description='Computes Euclidean distances between UMAP embeddings on a '
+                'user-specified phylogenetic distance metric and number of '
+                'components for all pairs of samples in a feauture table.',
+    citations=[
+        citations['lel2018umap'],
+        citations['lozupone2005unifrac'],
+        citations['lozupone2007quantitative'],
+        citations['chang2011variance'],
+        citations['chen2012associating'],
+        citations['mcdonald2018unifrac'],
     ]
 )
