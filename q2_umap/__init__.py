@@ -1,3 +1,3 @@
-from q2_umap._method import pipeline, distances
+from q2_umap._method import pipeline, distances, distances_phylogenetic
 
-__all__ = ['pipeline', 'distances']
+__all__ = ['pipeline', 'distances', 'distances_phylogenetic']
