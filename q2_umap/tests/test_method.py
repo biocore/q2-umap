@@ -95,4 +95,3 @@ class TestUMAPDistancesPhylogenetic(test_base.TestCase):
         dm = distances_phylogenetic(self.table_path, self.tree_path,
                                     'unweighted_unifrac')
         self.assertEqual(dm.shape, (6, 6))
-
