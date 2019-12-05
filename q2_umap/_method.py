@@ -1,14 +1,20 @@
 import pandas as pd
 import skbio
 import umap
+import unifrac
 from skbio.stats.composition import clr
 from scipy.spatial.distance import euclidean
 from sklearn.metrics.pairwise import _VALID_METRICS as _SK_VALID_METRICS
 from scipy.spatial.distance import pdist
 from ast import literal_eval
 from typing import Union, Callable
+from q2_types.feature_table import BIOMV210Format
+from q2_types.tree import NewickFormat
+from q2_diversity import beta_phylogenetic
 
 _ADDITIONAL_METRICS = ['aitchison']
+_PHYLOGENETIC_METRICS = ['unweighted_unifrac', 'weighted_unifrac',
+                         'weighted_normalized_unifrac', 'generalized_unifrac']
 _VALID_METRICS = _ADDITIONAL_METRICS + _SK_VALID_METRICS
 
 
@@ -45,6 +51,29 @@ def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
     results += emperor_plot(pcoa=pcoa_results.pcoa, metadata=metadata)
 
     return tuple(results)
+
+
+def distances_phylogenetic(table: BIOMV210Format,
+                           phylogeny: NewickFormat,
+                           umap_metric: str,
+                           n_jobs: int = 1,
+                           variance_adjusted: bool = False,
+                           alpha: float = None,
+                           n_components: int = 3,
+                           umap_args: Union[str, dict] = None,
+                           bypass_tips: bool = False) -> skbio.DistanceMatrix:
+    dm = beta_phylogenetic(table, phylogeny, umap_metric, n_jobs=n_jobs,
+                           variance_adjusted=variance_adjusted, alpha=alpha,
+                           bypass_tips=bypass_tips)
+
+    reducer = umap.UMAP(n_components=n_components, metric='precomputed',
+                        random_state=42, **umap_args)
+    embedding = reducer.fit_transform(dm.data)
+
+    # get euclidean distances between UMAP embeddings
+    sample_distances = pdist(embedding)
+
+    return skbio.DistanceMatrix(sample_distances, ids=dm.ids)
 
 
 def distances(table: pd.DataFrame,
