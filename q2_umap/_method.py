@@ -61,6 +61,10 @@ def distances_phylogenetic(table: BIOMV210Format,
                            n_components: int = 3,
                            umap_args: Union[str, dict] = None,
                            bypass_tips: bool = False) -> skbio.DistanceMatrix:
+    if umap_args is None:
+        umap_args = dict()
+    elif isinstance(umap_args, str):
+        umap_args = literal_eval(umap_args)
     dm = beta_phylogenetic(table, phylogeny, umap_metric, n_jobs=n_jobs,
                            variance_adjusted=variance_adjusted, alpha=alpha,
                            bypass_tips=bypass_tips)
