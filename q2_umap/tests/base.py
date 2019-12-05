@@ -17,10 +17,10 @@ class TestCase(unittest.TestCase):
     def create_data_path(self, filename):
         file_path = self.get_data_path(filename)
         dir_path = os.path.split(file_path)[0]
+        self.to_remove.append(file_path)
         if not os.path.isdir(dir_path):
             os.makedirs(dir_path)
             self.to_remove.append(dir_path)
-        self.to_remove.append(file_path)
         return file_path
 
     def tearDown(self) -> None:

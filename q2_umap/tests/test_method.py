@@ -90,3 +90,9 @@ class TestUMAPDistancesPhylogenetic(test_base.TestCase):
                                     umap_metric='unweighted_unifrac',
                                     umap_args=umap_kwargs)
         self.assertEqual(dm.shape, (6, 6))
+
+    def test_umap_phylogenetic_no_args(self):
+        dm = distances_phylogenetic(self.table_path, self.tree_path,
+                                    'unweighted_unifrac')
+        self.assertEqual(dm.shape, (6, 6))
+
