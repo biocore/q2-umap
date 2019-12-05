@@ -131,7 +131,7 @@ class TestUMAPDistancesPhylogeneticPlugin(TestPluginBase, test_base.TestCase):
 
     def test_distances(self):
         table = Artifact.import_data('FeatureTable[Frequency]', self.data)
-        tree = Artifact.import_data('Taxonomy[Rooted]', self.tree)
+        tree = Artifact.import_data('Phylogeny[Rooted]', self.tree)
         results = self.distance(table, tree, 'unweighted_unifrac',
                                 umap_args="{'n_neighbors': 3}")
         self.assertEqual(repr(results.distance_matrix.type), 'DistanceMatrix')
