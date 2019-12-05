@@ -1,7 +1,6 @@
 import pandas as pd
 import skbio
 import umap
-import unifrac
 from skbio.stats.composition import clr
 from scipy.spatial.distance import euclidean
 from sklearn.metrics.pairwise import _VALID_METRICS as _SK_VALID_METRICS
