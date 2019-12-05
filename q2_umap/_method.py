@@ -52,6 +52,49 @@ def pipeline(ctx, table, metadata, umap_metric='euclidean', n_components=3,
     return tuple(results)
 
 
+def pipeline_phylogenetic(ctx, table, phylogeny, metadata,
+                          umap_metric,
+                          n_components=3,
+                          n_jobs=1,
+                          variance_adjusted=False,
+                          alpha=None,
+                          bypass_tips=True,
+                          umap_args=None, sampling_depth=None,
+                          with_replacement=False):
+    rarefy = ctx.get_action('feature_table', 'rarefy')
+    dm = ctx.get_action('umap', 'distances_phylogenetic')
+    pcoa = ctx.get_action('diversity', 'pcoa')
+    emperor_plot = ctx.get_action('emperor', 'plot')
+
+    results = []
+
+    if sampling_depth:
+        rarefied_table = rarefy(table=table, sampling_depth=sampling_depth,
+                                with_replacement=with_replacement)
+        to_dm = rarefied_table.rarefied_table
+    else:
+        rarefied_table = [table]
+        to_dm = table
+
+    results += rarefied_table
+
+    dm_results = dm(table=to_dm, phylogeny=phylogeny,
+                    n_jobs=n_jobs, variance_adjusted=variance_adjusted,
+                    alpha=alpha, bypass_tips=bypass_tips,
+                    umap_metric=umap_metric, n_components=n_components,
+                    umap_args=umap_args)
+
+    results += dm_results
+
+    pcoa_results = pcoa(distance_matrix=dm_results.distance_matrix)
+
+    results += pcoa_results
+
+    results += emperor_plot(pcoa=pcoa_results.pcoa, metadata=metadata)
+
+    return tuple(results)
+
+
 def distances_phylogenetic(table: BIOMV210Format,
                            phylogeny: NewickFormat,
                            umap_metric: str,
