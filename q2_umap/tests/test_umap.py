@@ -44,7 +44,7 @@ class UMAPTests(TestCase):
             (5, 3),
             ord.samples.shape,
         )
-        self.assertTrue(ord.proportion_explained)
+        self.assertTrue(ord.proportion_explained is not None)
 
     def test_embed_more_n_neighbors(self):
         ord = embed(self.test_dm, n_neighbors=5)
