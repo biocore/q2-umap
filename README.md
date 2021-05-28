@@ -1,4 +1,66 @@
 [![Build Status](https://travis-ci.com/gwarmstrong/q2-umap.svg?branch=master)](https://travis-ci.com/gwarmstrong/q2-umap)
 [![Coverage Status](https://coveralls.io/repos/github/gwarmstrong/q2-umap/badge.svg?branch=master)](https://coveralls.io/github/gwarmstrong/q2-umap?branch=master)
 # q2-umap
-Applying umap to microbiome data via QIIME2
+Applying umap to microbiome data via QIIME2.
+
+This plugin is intended to be able to use as a drop-in replacement for PCoA.
+
+
+## Installation
+Make sure you have working installation of [Qiime2](https://qiime2.org).
+
+```bash
+conda install umap-learn -c conda-forge
+# in the q2-umap directory
+pip install . 
+```
+
+## CAUTION
+Note for all users. If you intend to view the results in 2 dimensions, you 
+should use `--p-number-of-dimensions 2`. Taking the first 2 components of a 3 
+dimensional embedding DOES NOT give you an optimal result.
+
+## Example
+We will use the [Moving Pictures Tutorial]() from [Qiime2](https://qiime2.org)
+to demonstrate use of the plugin.
+
+You should obtain the Jaccard distance matrix [here](https://docs.qiime2.org/2021.4/data/tutorials/moving-pictures/core-metrics-results/jaccard_distance_matrix.qza)
+and the sample metadata [here](https://data.qiime2.org/2021.4/tutorials/moving-pictures/sample_metadata.tsv)
+
+```bash
+# get the data
+wget \
+ -O "jaccard_distance_matrix.qza" \
+ "https://docs.qiime2.org/2021.4/data/tutorials/moving-pictures/core-metrics-results/jaccard_distance_matrix.qza"
+
+wget \
+  -O "sample-metadata.tsv" \
+  "https://data.qiime2.org/2021.4/tutorials/moving-pictures/sample_metadata.tsv"
+```
+
+Then, we can use q2-umap:
+```bash
+# embed with umap
+qiime umap embed \
+  --i-distance-matrix jaccard_distance_matrix.qza \
+  --p-n-neighbors 500 \
+  --o-umap jaccard_umap.qza
+  
+# visualize with emperor
+qiime emperor plot \
+    --i-pcoa jaccard_umap.qza \
+    --m-metadata-file sample-metadata.tsv \
+    --o-visualization umap-emperor.qzv
+    
+# optionally
+qiime umap center \
+  --i-embedding jaccard_umap.qza \
+  --o-centered-embedding centered_jaccard.qza
+  
+qiime emperor plot \
+    --i-pcoa centered_jaccard.qza \
+    --m-metadata-file sample-metadata.tsv \
+    --o-visualization centered-umap-emperor.qzv
+
+
+```
