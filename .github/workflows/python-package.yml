@@ -30,13 +30,27 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.8
-      - name: Install dependencies
+      - name: Install dependencies for linux
+        if: matrix.os == 'ubuntu-latest'
         shell: bash -l {0}
         run: |
           conda create -n test-q2-umap
           conda activate test-q2-umap
           wget https://data.qiime2.org/distro/core/qiime2-2021.4-py38-linux-conda.yml
           conda env create -q -n test-env --file qiime2-2021.4-py38-linux-conda.yml
+          conda install --yes -n test-env --file ci/conda_requirements.txt -c conda-forge
+          source activate test-env
+          conda install --yes flake8 nose coveralls
+          pip install -e .
+          qiime dev refresh-cache
+      - name: Install dependencies for mac
+        if: matrix.os == 'macos-latest'
+        shell: bash -l {0}
+        run: |
+          conda create -n test-q2-umap
+          conda activate test-q2-umap
+          wget https://data.qiime2.org/distro/core/qiime2-2021.4-py38-osx-conda.yml
+          conda env create -n qiime2-2021.4 --file qiime2-2021.4-py38-osx-conda.yml
           conda install --yes -n test-env --file ci/conda_requirements.txt -c conda-forge
           source activate test-env
           conda install --yes flake8 nose coveralls
