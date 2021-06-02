@@ -46,7 +46,7 @@ jobs:
         shell: bash -l {0}
         run: |
           wget https://data.qiime2.org/distro/core/qiime2-2021.4-py38-osx-conda.yml
-          conda env create -n qiime2-2021.4 --file qiime2-2021.4-py38-osx-conda.yml
+          conda env create -n test-env --file qiime2-2021.4-py38-osx-conda.yml
           conda activate test-env
           conda install --yes -n test-env --file ci/conda_requirements.txt -c conda-forge
           conda install --yes flake8 nose coveralls
