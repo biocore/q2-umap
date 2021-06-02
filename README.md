@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.com/gwarmstrong/q2-umap.svg?branch=master)](https://travis-ci.com/gwarmstrong/q2-umap)
-[![Coverage Status](https://coveralls.io/repos/github/gwarmstrong/q2-umap/badge.svg?branch=master)](https://coveralls.io/github/gwarmstrong/q2-umap?branch=master)
+![Build Status](https://github.com/biocore/q2-umap/actions/workflows/python-package.yml/badge.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/biocore/q2-umap/badge.svg?branch=master)](https://coveralls.io/github/gwarmstrong/q2-umap?branch=master)
 # q2-umap
 Applying umap to microbiome data via QIIME2.
 
-This plugin is intended to be able to use as a drop-in replacement for PCoA.
+This plugin is intended to be able to used very similarly to PCoA.
 
 
 ## Installation
@@ -52,15 +52,4 @@ qiime emperor plot \
     --m-metadata-file sample-metadata.tsv \
     --o-visualization umap-emperor.qzv
     
-# optionally
-qiime umap center \
-  --i-embedding jaccard_umap.qza \
-  --o-centered-embedding centered_jaccard.qza
-  
-qiime emperor plot \
-    --i-pcoa centered_jaccard.qza \
-    --m-metadata-file sample-metadata.tsv \
-    --o-visualization centered-umap-emperor.qzv
-
-
 ```

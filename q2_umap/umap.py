@@ -52,7 +52,7 @@ def embed(
         proportion_explained=null_eigvals,
     )
 
-    return ord_results
+    return center(ord_results)
 
 
 def center(embedding: OrdinationResults) -> OrdinationResults:
