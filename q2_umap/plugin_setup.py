@@ -2,7 +2,7 @@ from qiime2.plugin import (Plugin, Int, Citations,
                            Range, Float)
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.ordination import PCoAResults
-from q2_umap.umap import embed, center
+from q2_umap.umap import embed
 
 citations = Citations.load('citations.bib', package='q2_umap')
 
@@ -41,6 +41,8 @@ plugin.methods.register_function(
         ),
         'n_neighbors': (
             'The local neighborhood size used for UMAP.'
+            'RECOMMENDED: Set this to the number of samples in the input '
+            'distance matrix.'
         ),
         'min_dist': (
             'Controls how tightly UMAP is allowed to pack points together.'
@@ -58,32 +60,4 @@ plugin.methods.register_function(
     citations=[
         citations['lel2018umap'],
     ]
-)
-
-plugin.methods.register_function(
-    function=center,
-    inputs={
-        'embedding': PCoAResults,
-    },
-    parameters={
-    },
-    outputs=[
-        ('centered_embedding', PCoAResults),
-    ],
-    input_descriptions={
-        'embedding': (
-            'Embedding to center.'
-        )
-    },
-    parameter_descriptions={
-    },
-    output_descriptions={
-        'centered_embedding': (
-            'Embedding translated such that it is centered around 0'
-            'and rotated so that the principal axes of the original '
-            'embedding are used as the axes.'
-        )
-    },
-    name='center embedding',
-    description='Applies a centering to an embedding',
 )
